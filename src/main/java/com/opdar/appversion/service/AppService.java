@@ -5,12 +5,16 @@ import com.opdar.appversion.base.Page;
 import com.opdar.appversion.base.PageInterceptor;
 import com.opdar.appversion.entity.AppChannelEntity;
 import com.opdar.appversion.entity.AppEntity;
+import com.opdar.appversion.entity.AppVersionEntity;
 import com.opdar.appversion.mapper.AppChannelMapper;
 import com.opdar.appversion.mapper.AppMapper;
+import com.opdar.appversion.mapper.AppVersionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -18,6 +22,8 @@ public class AppService {
 
     @Autowired
     private AppChannelMapper appChannelMapper;
+    @Autowired
+    private AppVersionMapper appVersionMapper;
     @Autowired
     private AppMapper appMapper;
 
@@ -90,5 +96,113 @@ public class AppService {
         page.setCount(cnt);
         page.setData(app);
         return page;
+    }
+
+    public AppEntity updateApp(Long id, String appName, String platform, String appDesc, String icon) {
+        AppEntity where = new AppEntity();
+        where.setId(id);
+        AppEntity update = new AppEntity();
+        update.setAppName(appName);
+        update.setPlatform(platform);
+        update.setAppDesc(appDesc);
+        update.setIcon(icon);
+        update.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        appMapper.update(update,where);
+        return appMapper.selectOne(where);
+    }
+
+    public AppEntity createApp() {
+        AppEntity app = new AppEntity();
+        app.setPlatform("Android");
+        app.setAppName("未命名");
+        app.setAppDesc("开发者很懒，什么都没写。");
+        app.setIcon("/static/default/app.png");
+        app.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        app.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        appMapper.insert(app);
+        return app;
+    }
+
+    public AppChannelEntity createChannel(Long appId, Integer type, String channel, Long versionId, String title, String content, String url) {
+        AppChannelEntity channelEntity = new AppChannelEntity();
+        channelEntity.setAppId(appId);
+        channelEntity.setType(type);
+        channelEntity.setChannel(channel);
+        AppVersionEntity where = new AppVersionEntity();
+        where.setId(versionId);
+        AppVersionEntity version = appVersionMapper.selectOne(where);
+        channelEntity.setVersionName(version.getVersionName());
+        channelEntity.setVersionCode(version.getVersionCode());
+        channelEntity.setTitle(title);
+        channelEntity.setContent(content);
+        channelEntity.setUrl(url);
+        channelEntity.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        channelEntity.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        appChannelMapper.insert(channelEntity);
+        return channelEntity;
+    }
+
+    public AppVersionEntity createVersion(Long appId, String versionName) {
+        AppVersionEntity where = new AppVersionEntity();
+        where.setAppId(appId);
+        AppVersionEntity lastVersion = appVersionMapper.selectOne(where);
+        int nextVersionCode = 0;
+        if(lastVersion != null){
+            nextVersionCode = lastVersion.getVersionCode() + 1;
+        }
+
+        AppVersionEntity newVersion = new AppVersionEntity();
+        newVersion.setAppId(appId);
+        newVersion.setVersionCode(nextVersionCode);
+        newVersion.setVersionName(versionName);
+        newVersion.setCreateTime(new Timestamp(System.currentTimeMillis()));
+        newVersion.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        appVersionMapper.insert(newVersion);
+        return newVersion;
+    }
+
+    public List<AppVersionEntity> findVersions(Long appId) {
+        AppVersionEntity where = new AppVersionEntity();
+        where.setAppId(appId);
+        return appVersionMapper.selectList(where);
+    }
+
+    public AppEntity findLastAppVersion(Long appId) {
+        AppEntity appWhere = new AppEntity();
+        appWhere.setId(appId);
+        AppEntity app = appMapper.selectOne(appWhere);
+        AppChannelEntity where = new AppChannelEntity();
+        where.setAppOpen(1);
+        where.setAppId(appId);
+        final AppChannelEntity channel = appChannelMapper.selectOne(where);
+        if(channel != null){
+            app.setChannels(new LinkedList<AppChannelEntity>(){{add(channel);}});
+        }
+        return app;
+    }
+
+    public void shareApp(Long channelId, Long appId) {
+        AppChannelEntity where = new AppChannelEntity();
+        where.setAppId(appId);
+        AppChannelEntity update = new AppChannelEntity();
+        update.setAppOpen(0);
+        appChannelMapper.update(update,where);
+        where.setId(channelId);
+        update.setAppOpen(1);
+        appChannelMapper.update(update,where);
+    }
+
+    public void deleteChannel(Long channelId, Long appId) {
+        AppChannelEntity where = new AppChannelEntity();
+        where.setId(channelId);
+        where.setAppId(appId);
+        appChannelMapper.delete(where);
+    }
+
+    public void deleteVersion(Long appId, Long versionId) {
+        AppVersionEntity where = new AppVersionEntity();
+        where.setId(versionId);
+        where.setAppId(appId);
+        appVersionMapper.delete(where);
     }
 }

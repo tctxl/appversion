@@ -14,6 +14,9 @@ import java.util.EnumSet;
 @ComponentScan(basePackages = {"com.opdar.appversion"})
 public class ApiApplication {
     public static void main(String[] args)  {
+        Context.putResourceMapping("/upload", "./upload");
+        Context.putResourceMapping("/apk", "./apk");
+        Context.putResourceMapping("/static", "classpath:/dash/static");
 
         Mote mote = Mote.getInstance();
         CorsRegistry.get().setAllowOrigin("http://192.168.1.178:8080");

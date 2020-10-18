@@ -5,18 +5,22 @@
     <div
       class="menu-btn">
       <i class="el-icon-circle-plus-outline"></i>
-      <div style="margin-left: 5px;">新建项目</div>
+      <div style="margin-left: 5px;" @click="createApp">新建应用</div>
     </div>
   </div>
-  <div style="position: absolute;display: flex;height: calc(100% - 134px);width: 100%;">
+  <div style="position: absolute;display: flex;height: calc(100% - 154px);width: 100%;">
     <div v-if="apps.length === 0" style="font-size: 24px;color: #777777;text-align: center;width: 100%;">什么都没有...
     </div>
 
-    <div style="padding: 0 25px 25px;width: 100%;">
+    <div style="padding: 0 25px 25px 25px;width: 100%;overflow: auto">
       <el-row :gutter="20" justify="space-between">
-        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="2" v-for="app in apps">
+        <el-col :xs="12" :sm="8" :md="6" :lg="4" :xl="2" :key="app.id" v-for="app in apps">
           <div @click="$router.push('/dash/app/'+app.id)" class="app-card">
-            <div style="width: 50px;height: 50px;background-color: #0d7f56;border-radius: 50%;display: inline-block;border: 3px dashed #000"></div>
+            <el-image slot="default" fit="cover" class="el-upload-list__item-thumbnail" style="width: 50px;height: 50px;border-radius: 50%;border: 3px solid #dedede;box-shadow: 0px 0px 20px 0px #bdbdbd;" :src="$api+app.icon">
+              <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div>
+            </el-image>
             <div style="margin-top: 10px;">{{ app.appName }}</div>
           </div>
         </el-col>
@@ -42,6 +46,14 @@ export default {
     this.loadAppList();
   },
   methods: {
+    createApp(){
+      let that = this;
+      that.$http.post('/api/dash/app/create').then((res) => {
+        if (res.data.code === 0) {
+          that.$router.push('/dash/app/'+res.data.data.id)
+        }
+      })
+    },
     loadAppList() {
       let that = this;
       that.$http.post('/api/dash/app/list').then((res) => {

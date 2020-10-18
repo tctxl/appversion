@@ -17,6 +17,7 @@ public class AppChannelEntity {
     private Integer versionCode;
     private String channel;
     private Integer type;
+    private Integer appOpen;
     private String title;
     private String content;
     private String url;
@@ -29,11 +30,12 @@ public class AppChannelEntity {
     public String toString() {
         return "AppChannelEntity{" +
                 "id=" + id +
-                ", appId='" + appId + '\'' +
+                ", appId=" + appId +
                 ", versionName='" + versionName + '\'' +
                 ", versionCode=" + versionCode +
                 ", channel='" + channel + '\'' +
                 ", type=" + type +
+                ", appOpen=" + appOpen +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", url='" + url + '\'' +
@@ -41,6 +43,14 @@ public class AppChannelEntity {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 '}';
+    }
+
+    public Integer getAppOpen() {
+        return appOpen;
+    }
+
+    public void setAppOpen(Integer appOpen) {
+        this.appOpen = appOpen;
     }
 
     public Long getId() {

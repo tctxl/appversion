@@ -14,6 +14,7 @@ public class ErrorPrinterHandler implements IErrorHandler {
         if(throwable instanceof ValidateException){
             result.setMsg(((ValidateException) throwable).getErrMsg());
         }else if(throwable instanceof ErrCodeException){
+            result.setCode(((ErrCodeException) throwable).getCode());
             result.setMsg(((ErrCodeException) throwable).getMsg());
         }else{
             result.setMsg(throwable.getMessage());

@@ -1,10 +1,1 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>登录</title>
-</head>
-<body>
-login page
-</body>
-</html>
+<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><title>appversion-frontend</title><link href=/static/css/app.e6a4cf4ad86cfcad4d8836e81b6b1887.css rel=stylesheet></head><body><div id=app></div><script type=text/javascript src=/static/js/manifest.67b2c3462189862107ba.js></script><script type=text/javascript src=/static/js/vendor.5eda58e322490e864f8d.js></script><script type=text/javascript src=/static/js/app.cc8da5aabef15046a178.js></script></body></html>

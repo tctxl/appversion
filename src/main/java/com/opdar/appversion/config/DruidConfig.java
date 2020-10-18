@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Properties;
 
 @Configuration
@@ -46,6 +47,7 @@ class DruidConfig implements ApplicationContextAware {
         dataSource.setTestOnReturn(false);
         dataSource.setPoolPreparedStatements(true);
         dataSource.setMaxPoolPreparedStatementPerConnectionSize(20);
+        dataSource.setConnectionInitSqls(new LinkedList<String>(){{add("set names utf8mb4;");}});
         Properties prop = new Properties();
         prop.setProperty("config.decrypt","false");
         dataSource.setConnectProperties(prop);

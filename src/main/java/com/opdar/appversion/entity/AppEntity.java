@@ -16,11 +16,26 @@ public class AppEntity {
     private Long id;
     private String appName;
     private String platform;
-    private String desc;
+    private String appDesc;
+    private String icon;
     private Timestamp createTime;
     private Timestamp updateTime;
     @Field(resultmap=false,insert = false,update = false,delete = false,select = false)
     private List<AppChannelEntity> channels = new LinkedList<>();
+
+    @Override
+    public String toString() {
+        return "AppEntity{" +
+                "id=" + id +
+                ", appName='" + appName + '\'' +
+                ", platform='" + platform + '\'' +
+                ", appDesc='" + appDesc + '\'' +
+                ", icon='" + icon + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", channels=" + channels +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -38,12 +53,20 @@ public class AppEntity {
         this.platform = platform;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getAppDesc() {
+        return appDesc;
+    }
+
+    public void setAppDesc(String appDesc) {
+        this.appDesc = appDesc;
     }
 
     public String getAppName() {

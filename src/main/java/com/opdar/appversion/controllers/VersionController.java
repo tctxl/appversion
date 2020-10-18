@@ -3,8 +3,10 @@ package com.opdar.appversion.controllers;
 import com.opdar.appversion.ApiApplication;
 import com.opdar.appversion.base.ErrCodeException;
 import com.opdar.appversion.entity.AppChannelEntity;
+import com.opdar.appversion.entity.AppEntity;
 import com.opdar.appversion.service.AppService;
 import com.opdar.mote.web.annotations.web.Request;
+import com.opdar.mote.web.base.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -24,6 +26,19 @@ public class VersionController {
             throw new ErrCodeException("参数不能为空");
         }
         return appService.checkVersion(ver,channel,appId);
+    }
+
+    @Request(value = "/s/{{appId}}",restful = true, format = Request.Format.VIEW)
+    public String check(Long appId) {
+        if(StringUtils.isEmpty(appId)){
+            throw new ErrCodeException("未找到该应用");
+        }
+        AppEntity app = appService.findLastAppVersion(appId);
+        if(app.getChannels().size() == 0){
+            throw new ErrCodeException("未找到该应用");
+        }
+        Context.putAttribute("app",app);
+        return "app";
     }
 
     public static void main(String[] args) {

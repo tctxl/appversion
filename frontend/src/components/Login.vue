@@ -43,6 +43,7 @@ export default {
         console.log(that.userName,that.userPwd,res.data.data);
         if(res.data.code === 0){
           that.$user.token = res.data.data;
+          this.$cookie.set('token', res.data.data, 1);
           that.$router.push('/dash')
         }
       });
