@@ -30,7 +30,7 @@ public class CommonConfig {
     @Bean
     public ViewTemplate viewTemplate() {
         FreemarkerViewTemplate vt = new FreemarkerViewTemplate();
-        vt.setPrefix("classpath:/dash/");
+        vt.setPrefix("classpath:/templates/");
         return vt;
     }
 

@@ -41,6 +41,6 @@ public class DashControlller {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "login";
+        return "dash/login";
     }
 }

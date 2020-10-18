@@ -14,6 +14,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@PropertySource("classpath:config.properties")
+@PropertySource("file:./config/config.properties")
 class DruidConfig implements ApplicationContextAware {
 
     private ApplicationContext applicationContext ;
@@ -31,9 +32,21 @@ class DruidConfig implements ApplicationContextAware {
     public DruidDataSource getDataSource() {
         Environment env = applicationContext.getEnvironment();
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl(env.getProperty("druid.url"));
-        dataSource.setUsername(env.getProperty("druid.username"));
-        dataSource.setPassword(env.getProperty("druid.password"));
+        String jdbcUrl = System.getenv("JDBC_URL");
+        String jdbcUserName = System.getenv("JDBC_USERNAME");
+        String jdbcPassword = System.getenv("JDBC_PASSWORD");
+        if(StringUtils.isEmpty(jdbcUrl)){
+            jdbcUrl = env.getProperty("druid.url");
+        }
+        if(StringUtils.isEmpty(jdbcUserName)){
+            jdbcUserName = env.getProperty("druid.username");
+        }
+        if(StringUtils.isEmpty(jdbcPassword)){
+            jdbcPassword = env.getProperty("druid.password");
+        }
+        dataSource.setUrl(jdbcUrl);
+        dataSource.setUsername(jdbcUserName);
+        dataSource.setPassword(jdbcPassword);
         dataSource.setDriverClassName(env.getProperty("druid.driverClassName"));
         dataSource.setInitialSize(100);
         dataSource.setMinIdle(100);

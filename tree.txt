@@ -1,0 +1,7 @@
+﻿appversion
+├─config 			配置文件
+├─frontend			前端代码
+├─sqls				数据库
+├─src				Java代码
+├─apk				apk上传目录
+└─upload			icon等图片上传目录
