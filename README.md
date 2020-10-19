@@ -27,11 +27,28 @@
 
 可以通过设置Environment参数来配置数据源地址等参数
 `JDBC_URL`,`JDBC_USERNAME`,`JDBC_PASSWORD`
+如不设置，则自动使用H2作为嵌入式数据库运行
 
 **如何运行**
+
+`docker run tctxl/appversion:1.0.20201019`
+
+如要自定义数据源，可使用以下命令，目前只支持MYSQL（MARIADB）
 
 `docker run 
 -e JDBC_URL="jdbc:mysql://127.0.0.1:3306/appversion?zeroDateTimeBehavior=convertToNull&useSSL=false"
 -e JDBC_USERNAME="root"
 -e JDBC_PASSWORD="123456"
- tctxl/appversion:1.0.20201019`
+tctxl/appversion:1.0.20201019`
+
+**数据持久化**
+
+可通过docker的volume功能将容器内的路径映射到本机
+
+1. `/db`为H2生成的数据库目录
+2. `/apk`为上传apk包的目录
+3. `/upload`为上传App的ICON的目录
+
+示例：
+
+`docker run -v /opt/appversion/db:/db -v /opt/appversion/apk:/apk -v /opt/appversion/upload:/upload tctxl/appversion:1.0.20201019`
