@@ -52,4 +52,4 @@ tctxl/appversion:1.0.20201019`
 
 示例：
 
-`docker run  -it --name appversion -v $(pwd)/entry:/entry:ro -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.0.20201019`
+`docker run  -it --name appversion -v $(pwd)/entry:/entry -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.0.20201019`
