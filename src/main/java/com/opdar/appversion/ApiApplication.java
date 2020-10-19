@@ -29,7 +29,7 @@ public class ApiApplication {
         Context.putResourceMapping("/static", "classpath:/templates/dash/static");
 
         Mote mote = Mote.getInstance();
-        CorsRegistry.get().setAllowOrigin("http://192.168.1.178:8080");
+        CorsRegistry.get().setAllowOrigin("http://127.0.0.1:8080");
         CommandRegistry.get().addCommand("entry","e", new ICommand() {
             @Override
             public void run(String[] s) {
@@ -42,6 +42,8 @@ public class ApiApplication {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                    }else{
+                        System.out.println("未生成入口点");
                     }
                 }
             }

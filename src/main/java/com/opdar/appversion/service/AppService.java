@@ -11,6 +11,7 @@ import com.opdar.appversion.mapper.AppMapper;
 import com.opdar.appversion.mapper.AppVersionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
@@ -204,5 +205,24 @@ public class AppService {
         where.setId(versionId);
         where.setAppId(appId);
         appVersionMapper.delete(where);
+    }
+
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteApp(Long id) {
+        {
+            AppVersionEntity where = new AppVersionEntity();
+            where.setAppId(id);
+            appVersionMapper.delete(where);
+        }
+        {
+            AppChannelEntity where = new AppChannelEntity();
+            where.setAppId(id);
+            appChannelMapper.delete(where);
+        }
+        {
+            AppEntity where = new AppEntity();
+            where.setId(id);
+            appMapper.delete(where);
+        }
     }
 }

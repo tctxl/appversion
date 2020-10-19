@@ -1,8 +1,21 @@
 <template>
   <div v-if="app" style="display: flex;height: 100%;">
     <div
-      style="max-width: 275px;min-width: 275px;background-color: #f5f7fa;border-top-left-radius: 20px;border-bottom-left-radius: 20px;">
-      <div style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;padding: 0 25px;">
+      style="max-width: 275px;min-width: 275px;background-color: #f5f7fa;border-top-left-radius: 20px;border-bottom-left-radius: 20px;position: relative;">
+      <div class="app-more">
+        <el-popover
+          placement="top"
+          trigger="hover"
+          width="160">
+          <p>是否删除该应用？删除后相关数据将不可恢复！</p>
+          <div style="text-align: right; margin: 0">
+            <el-button type="danger" @click="deleteApp"  size="mini" >确定</el-button>
+          </div>
+          <i class="el-icon-delete" slot="reference" style="padding: 10px;cursor: pointer;"></i>
+        </el-popover>
+      </div>
+      <div
+        style="height: 100%;display: flex;flex-direction: column;justify-content: center;align-items: center;padding: 0 25px;">
         <el-upload
           :action="$api+'api/dash/app/icon'"
           list-type="picture"
@@ -11,16 +24,26 @@
           :on-success="handleAppIconSuccess"
           :auto-upload="true">
 
-          <el-image slot="default"  class="el-upload-list__item-thumbnail" style="width: 80px;height: 80px;border-radius: 50%;border: 3px solid #dedede;box-shadow: 0px 0px 20px 0px #bdbdbd;" fit="cover" :src="$api+app.icon">
+          <el-image slot="default" class="el-upload-list__item-thumbnail"
+                    style="width: 80px;height: 80px;border-radius: 50%;border: 3px solid #dedede;box-shadow: 0px 0px 20px 0px #bdbdbd;"
+                    fit="cover" :src="$api+app.icon">
             <div slot="placeholder" class="image-slot">
               加载中<span class="dot">...</span>
             </div>
           </el-image>
         </el-upload>
-        <div style="margin-top: 10px;font-size: 18px;" @click="editAppName = true" v-if="!editAppName">{{ app.appName }}</div>
-        <div style="margin-top: 10px;" v-else><el-input :autofocus="true" @blur="updateAppName" style="font-size: 18px;text-align: center;" v-model="app.appName"/></div>
+        <div style="margin-top: 10px;font-size: 18px;" @click="editAppName = true" v-if="!editAppName">{{
+            app.appName
+          }}
+        </div>
+        <div style="margin-top: 10px;" v-else>
+          <el-input :autofocus="true" @blur="updateAppName" style="font-size: 18px;text-align: center;"
+                    v-model="app.appName"/>
+        </div>
 
-        <div style="margin-top: 10px;font-size: 14px;color: #777777;"  @click="editPlatform = true" v-if="!editPlatform">{{ app.platform }}</div>
+        <div style="margin-top: 10px;font-size: 14px;color: #777777;" @click="editPlatform = true" v-if="!editPlatform">
+          {{ app.platform }}
+        </div>
         <div style="margin-top: 10px;font-size: 14px;color: #777777;" v-else>
           <el-select @change="updatePlatform" v-model="app.platform" placeholder="请选择">
             <el-option
@@ -31,9 +54,15 @@
               label="iOS"
               value="iOS">
             </el-option>
-          </el-select></div>
-        <div style="margin-top: 10px;font-size: 14px;color: #777777;"  @click="editAppDesc = true" v-if="!editAppDesc">{{ app.appDesc }}</div>
-        <div style="margin-top: 10px;width: 100%;" v-else><el-input resize="none" :autofocus="true" type="textarea" @blur="updateAppDesc" style="font-size: 12px;text-align: center;" v-model="app.appDesc"/></div>
+          </el-select>
+        </div>
+        <div style="margin-top: 10px;font-size: 14px;color: #777777;" @click="editAppDesc = true" v-if="!editAppDesc">
+          {{ app.appDesc }}
+        </div>
+        <div style="margin-top: 10px;width: 100%;" v-else>
+          <el-input resize="none" :autofocus="true" type="textarea" @blur="updateAppDesc"
+                    style="font-size: 12px;text-align: center;" v-model="app.appDesc"/>
+        </div>
 
         <el-popover
           placement="bottom"
@@ -41,7 +70,8 @@
           <div style="font-size: 12px;color: #aaa;text-align: center;">
             上传一个新版本
           </div>
-          <el-button @click="loadVersions" circle icon="el-icon-plus" type="primary" slot="reference" style="margin-top: 50px;"></el-button>
+          <el-button @click="loadVersions" circle icon="el-icon-plus" type="primary" slot="reference"
+                     style="margin-top: 50px;"></el-button>
         </el-popover>
       </div>
     </div>
@@ -106,26 +136,31 @@
           <el-table-column
             label="对外分发">
             <template slot-scope="scope">
-<!--              <el-button type="primary">对外分发</el-button>-->
-              <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;" v-if="scope.row.appOpen !== 1" target="_blank" @click="shareApp(scope.row)">设置</a>
-              <div v-else><a style="text-decoration: none;color: #777777;" :href="$apk+'/s/'+$route.params.id">已分发</a></div>
+              <!--              <el-button type="primary">对外分发</el-button>-->
+              <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;"
+                 v-if="scope.row.appOpen !== 1" target="_blank" @click="shareApp(scope.row)">设置</a>
+              <div v-else><a style="text-decoration: none;color: #777777;" :href="$apk+'/s/'+$route.params.id">已分发</a>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
             label="删除">
             <template slot-scope="scope">
-<!--              <el-button type="primary">对外分发</el-button>-->
-              <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;" target="_blank" @click="delChannel(scope.row)">删除</a>
+              <!--              <el-button type="primary">对外分发</el-button>-->
+              <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;" target="_blank"
+                 @click="delChannel(scope.row)">删除</a>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <div style="padding: 25px;display: flex;justify-content: space-between;margin-top: 20px;align-items: center;">
-        <el-button style="width: 50px;" type="primary" @click="onPrev" :disabled="!(pageNo > 1)"><i class="el-icon-arrow-left"></i></el-button>
+        <el-button style="width: 50px;" type="primary" @click="onPrev" :disabled="!(pageNo > 1)"><i
+          class="el-icon-arrow-left"></i></el-button>
         <div style="font-size: 12px;color: #777777;">
-          {{pageNo}}/{{pageCount}}
+          {{ pageNo }}/{{ pageCount }}
         </div>
-        <el-button style="width: 50px;" type="primary" @click="onNext" :disabled="!(pageNo < pageCount)"><i class="el-icon-arrow-right"></i>
+        <el-button style="width: 50px;" type="primary" @click="onNext" :disabled="!(pageNo < pageCount)"><i
+          class="el-icon-arrow-right"></i>
         </el-button>
       </div>
     </div>
@@ -136,9 +171,11 @@
         title="新建版本号"
         :visible.sync="dialogCreateVersionCodeVisible"
         append-to-body>
-        <div >
+        <div>
           <h4>版本号设置</h4>
-          <div><el-input v-model="newVersionName"  placeholder="版本号名称，如：1.0.1,1.0.2..."/></div>
+          <div>
+            <el-input v-model="newVersionName" placeholder="版本号名称，如：1.0.1,1.0.2..."/>
+          </div>
         </div>
 
         <div>
@@ -161,16 +198,24 @@
       </div>
       <div v-else>
         <h4>AppStore设置</h4>
-        <div><el-input v-model="newVersion.url"  placeholder="应用在AppStore内的地址"/></div>
+        <div>
+          <el-input v-model="newVersion.url" placeholder="应用在AppStore内的地址"/>
+        </div>
       </div>
       <div v-show="app.platform === 'Android'">
         <h4>渠道设置</h4>
-        <div><el-input v-model="newVersion.channel"  placeholder="渠道名称，用于不同渠道版本升级"/></div>
+        <div>
+          <el-input v-model="newVersion.channel" placeholder="渠道名称，用于不同渠道版本升级"/>
+        </div>
       </div>
       <div>
         <h4>升级提醒设置</h4>
-        <div><el-input v-model="newVersion.title"  placeholder="标题"/></div>
-        <div style="margin-top: 10px;"><el-input v-model="newVersion.content"  type="textarea" resize="none" placeholder="内容"/></div>
+        <div>
+          <el-input v-model="newVersion.title" placeholder="标题"/>
+        </div>
+        <div style="margin-top: 10px;">
+          <el-input v-model="newVersion.content" type="textarea" resize="none" placeholder="内容"/>
+        </div>
       </div>
       <div>
         <h4>升级方式</h4>
@@ -193,7 +238,9 @@
         </template>
       </div>
       <div>
-        <div><h4>版本号设置 <span style="font-weight: normal;font-size: 12px;color: #0d7f56;text-underline: #0d7f56;cursor: pointer;" @click="dialogCreateVersionCodeVisible=true">(新建版本号)</span></h4></div>
+        <div><h4>版本号设置 <span
+          style="font-weight: normal;font-size: 12px;color: #0d7f56;text-underline: #0d7f56;cursor: pointer;"
+          @click="dialogCreateVersionCodeVisible=true">(新建版本号)</span></h4></div>
         <div>
           <el-select v-model="newVersion.versionId" placeholder="如：1.0.0.20201018">
 
@@ -203,7 +250,9 @@
               :label="version.versionName"
               :value="version.id">
               <span style="float: left">{{ version.versionName }}</span>
-              <el-button size="mini" style="float: right; color: #8492a6; font-size: 13px" @click.stop="delVersion(version)">删除</el-button>
+              <el-button size="mini" style="float: right; color: #8492a6; font-size: 13px"
+                         @click.stop="delVersion(version)">删除
+              </el-button>
             </el-option>
           </el-select>
         </div>
@@ -225,77 +274,96 @@ export default {
       app: null,
       pageNo: 1,
       pageCount: 1,
-      editAppName:false,
-      editPlatform:false,
-      editAppDesc:false,
-      dialogCreateVersionVisible:false,
-      dialogCreateVersionCodeVisible:false,
-      newVersion:{
-        channel:'default',
-        title:'',
-        url:'',
-        content:'',
-        type:1,
-        versionId:'',
-        versions:[]
+      editAppName: false,
+      editPlatform: false,
+      editAppDesc: false,
+      dialogCreateVersionVisible: false,
+      dialogCreateVersionCodeVisible: false,
+      newVersion: {
+        channel: 'default',
+        title: '',
+        url: '',
+        content: '',
+        type: 1,
+        versionId: '',
+        versions: []
       },
-      newVersionName:''
+      newVersionName: ''
     };
   },
   mounted() {
     this.loadAppDetail();
-    console.log(this.$refs.channels)
   },
   methods: {
-    shareApp(channel){
+    deleteApp(){
       let that = this;
-      that.$http.post('/api/dash/app/share', {appId: this.$route.params.id,id:channel.id}).then((res) => {
+      that.$confirm('删除应用后，相关的一切数据将不可恢复，是否删除？', '危险', {
+        confirmButtonText: '删除',
+        type:'danger',
+        // cancelButtonText: '放弃修改',
+        callback: action => {
+          if(action === 'confirm'){
+            that.$http.post('/api/dash/app/delete', {id: this.$route.params.id}).then((res) => {
+              if (res.data.code === 0) {
+                that.$router.back();
+              }
+            })
+          }
+        }
+      });
+    },
+    shareApp(channel) {
+      let that = this;
+      that.$http.post('/api/dash/app/share', {appId: this.$route.params.id, id: channel.id}).then((res) => {
         if (res.data.code === 0) {
           for (let i = 0; i < that.app.channels.length; i++) {
             let c = that.app.channels[i];
-            if(c.id !== channel.id){
+            if (c.id !== channel.id) {
               c.appOpen = 0;
-            }else{
+            } else {
               c.appOpen = 1;
             }
           }
         }
       })
     },
-    delChannel(channel){
+    delChannel(channel) {
       let that = this;
-      that.$http.post('/api/dash/app/channel/delete', {appId: this.$route.params.id,id:channel.id}).then((res) => {
+      that.$http.post('/api/dash/app/channel/delete', {appId: this.$route.params.id, id: channel.id}).then((res) => {
         if (res.data.code === 0) {
           for (let i = 0; i < that.app.channels.length; i++) {
             let c = that.app.channels[i];
-            if(c.id === channel.id){
-              that.app.channels.splice(i,1);
+            if (c.id === channel.id) {
+              that.app.channels.splice(i, 1);
               break;
             }
           }
         }
       })
     },
-    delVersion(version){
+    delVersion(version) {
       let that = this;
-      that.$http.post('/api/dash/app/version/delete', {appId: this.$route.params.id,id:version.id}).then((res) => {
+      that.$http.post('/api/dash/app/version/delete', {appId: this.$route.params.id, id: version.id}).then((res) => {
         if (res.data.code === 0) {
           for (let i = 0; i < that.newVersion.versions.length; i++) {
             let c = that.newVersion.versions[i];
-            if(c.id === version.id){
-              if(that.newVersion.versionId === version.id){
+            if (c.id === version.id) {
+              if (that.newVersion.versionId === version.id) {
                 that.newVersion.versionId = '';
               }
-              that.newVersion.versions.splice(i,1);
+              that.newVersion.versions.splice(i, 1);
               break;
             }
           }
         }
       })
     },
-    createVersion(){
+    createVersion() {
       let that = this;
-      that.$http.post('/api/dash/app/version/create', {appId: this.$route.params.id,versionName:that.newVersionName}).then((res) => {
+      that.$http.post('/api/dash/app/version/create', {
+        appId: this.$route.params.id,
+        versionName: that.newVersionName
+      }).then((res) => {
         if (res.data.code === 0) {
           that.newVersionName = '';
           that.newVersion.versions.unshift(res.data.data);
@@ -303,73 +371,73 @@ export default {
         that.dialogCreateVersionCodeVisible = false;
       })
     },
-    loadVersions(){
+    loadVersions() {
       let that = this;
       that.dialogCreateVersionVisible = true;
       that.$http.post('/api/dash/app/version/find', {appId: this.$route.params.id}).then((res) => {
         if (res.data.code === 0) {
-          that.$nextTick(function (){
+          that.$nextTick(function () {
             that.newVersion.versions = res.data.data;
-            if(that.newVersion.versions.length > 0){
+            if (that.newVersion.versions.length > 0) {
               that.newVersion.versionId = that.newVersion.versions[0].id;
             }
           });
         }
       })
     },
-    handleAppVersionSuccess(res, file){
+    handleAppVersionSuccess(res, file) {
       let that = this;
-      if(res.code===305){
+      if (res.code === 305) {
         this.$router.push('/');
         return;
       }
-      if(res.code===0){
+      if (res.code === 0) {
         that.newVersion.url = res.data;
         that.$nextTick(() => {
           that.newVersion.url = that.$refs.newVersionUrl.href;
         })
       }
     },
-    handleAppIconSuccess(res, file){
+    handleAppIconSuccess(res, file) {
       let that = this;
-      if(res.code===305){
+      if (res.code === 305) {
         this.$router.push('/');
         return;
       }
-      if(res.code===0){
+      if (res.code === 0) {
         that.$http.post('/api/dash/app/update', {id: this.$route.params.id, icon: res.data}).then((res) => {
           if (res.data.code === 0) {
-            that.$nextTick(function (){
+            that.$nextTick(function () {
               that.app.icon = res.data.data.icon;
             });
           }
         })
       }
     },
-    createChannel(){
+    createChannel() {
       let that = this;
       let req = {
-        appId:this.$route.params.id,
-        channel:that.newVersion.channel,
-        title:that.newVersion.title,
-        url:that.newVersion.url,
-        content:that.newVersion.content,
-        type:that.newVersion.type,
-        versionId:that.newVersion.versionId,
+        appId: this.$route.params.id,
+        channel: that.newVersion.channel,
+        title: that.newVersion.title,
+        url: that.newVersion.url,
+        content: that.newVersion.content,
+        type: that.newVersion.type,
+        versionId: that.newVersion.versionId,
       }
       that.$http.post('/api/dash/app/channel/create', req).then((res) => {
         if (res.data.code === 0) {
           that.newVersion = {
-            channel:'default',
-            title:'',
-            url:'',
-            content:'',
-            type:1,
+            channel: 'default',
+            title: '',
+            url: '',
+            content: '',
+            type: 1,
             version: {
-              versionName:'',
-              versionCode:0
+              versionName: '',
+              versionCode: 0
             },
-            versions:[]
+            versions: []
           };
           res.data.data.appOpen = 0;
           that.app.channels.unshift(res.data.data);
@@ -378,7 +446,7 @@ export default {
         that.editAppName = false;
       })
     },
-    updateAppName(){
+    updateAppName() {
       let that = this;
       that.$http.post('/api/dash/app/update', {id: this.$route.params.id, appName: this.app.appName}).then((res) => {
         if (res.data.code === 0) {
@@ -387,7 +455,7 @@ export default {
         that.editAppName = false;
       })
     },
-    updateAppDesc(){
+    updateAppDesc() {
       let that = this;
       that.$http.post('/api/dash/app/update', {id: this.$route.params.id, appDesc: this.app.appDesc}).then((res) => {
         if (res.data.code === 0) {
@@ -396,7 +464,7 @@ export default {
         that.editAppDesc = false;
       })
     },
-    updatePlatform(){
+    updatePlatform() {
       let that = this;
       that.$http.post('/api/dash/app/update', {id: this.$route.params.id, platform: this.app.platform}).then((res) => {
         if (res.data.code === 0) {
@@ -428,6 +496,15 @@ export default {
 </script>
 
 <style scoped>
+.app-more {
+  position: absolute;
+  right: 0;
+}
+.app-more:hover{
+  opacity: 0.7;
+  transition: all 0.2s ease-in-out;
+}
+
 .btn-close {
   display: flex;
   justify-content: flex-end;
@@ -441,7 +518,8 @@ export default {
   background-color: #0e7f56;
   cursor: pointer;
 }
-.btn-close:hover{
+
+.btn-close:hover {
   opacity: 0.7;
   transition: all 0.2s ease-in-out;
 }

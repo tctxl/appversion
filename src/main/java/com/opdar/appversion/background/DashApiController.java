@@ -108,6 +108,16 @@ public class DashApiController {
     }
 
     @Interceptor(TokenInterceptor.class)
+    @Request(value = "/api/dash/app/delete",restful = true,format = Request.Format.JSON)
+    public String appDelete(Long id) {
+        if(StringUtils.isEmpty(id)){
+            throw new ErrCodeException(Constants.ErrorText.PARAMS_ERROR);
+        }
+        appService.deleteApp(id);
+        return "";
+    }
+
+    @Interceptor(TokenInterceptor.class)
     @Request(value = "/api/dash/app/channel/delete",restful = true,format = Request.Format.JSON)
     public String deleteChannel(Long id, Long appId) {
         if(StringUtils.isEmpty(appId)){
