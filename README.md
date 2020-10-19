@@ -53,3 +53,10 @@ tctxl/appversion:1.0.20201019`
 示例：
 
 `docker run  -it --name appversion -v $(pwd)/entry:/entry -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.0.20201019`
+
+**演示**
+```
+地址：http://114.67.87.255:10007/oa4a0NhG7D
+用户名：wHWFXE
+密码：3NOZo5Wzufrf
+```
