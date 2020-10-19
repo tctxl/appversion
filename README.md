@@ -49,6 +49,7 @@ tctxl/appversion:1.0.20201019`
 1. `/db`为H2生成的数据库目录
 2. `/apk`为上传apk包的目录
 3. `/upload`为上传App的ICON的目录
+4. `/entry`入口点信息文件目录
 
 示例：
 
@@ -73,7 +74,7 @@ appId : 应用ID
 
 **演示接口**
 ```
-http://114.67.87.255:10007?ver=2020.8&channel=default&appId=1000
+http://114.67.87.255:10007/api/version/check?ver=2020.8&channel=default&appId=1000
 ```
 
 **返回结果**
