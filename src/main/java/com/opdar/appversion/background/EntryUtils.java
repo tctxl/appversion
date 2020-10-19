@@ -12,8 +12,8 @@ public class EntryUtils {
             if(i<10){
                 char a = (char) (48 + i);
                 builder.append(a);
-            }else if(i < 37){
-                char a = (char) (65 - 9 + i);
+            }else if(i < 36){
+                char a = (char) (65 - 10 + i);
                 builder.append(a);
             }else{
                 char a = (char) (97 - 36 + i);

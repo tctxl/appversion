@@ -2,6 +2,7 @@ package com.opdar.appversion.background;
 
 public class Constants {
     public static final long DASH_USER_TIME = 3600 * 1000;
+    public static final String ENTRY = "entry/config.json";
 
     public final static class Key{
         public static final String USER_NAME = "user";

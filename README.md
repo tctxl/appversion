@@ -6,6 +6,7 @@
     ├─sqls    			数据库
     ├─src     			Java代码
     ├─apk     			apk上传目录
+    ├─entry     		入口点配置目录
     └─upload  			icon等图片上传目录
     
 
@@ -51,4 +52,4 @@ tctxl/appversion:1.0.20201019`
 
 示例：
 
-`docker run -v /opt/appversion/db:/db -v /opt/appversion/apk:/apk -v /opt/appversion/upload:/upload tctxl/appversion:1.0.20201019`
+`docker run  -it --name appversion -v $(pwd)/entry:/entry:ro -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.0.20201019`

@@ -34,7 +34,7 @@ public class ApiApplication {
             @Override
             public void run(String[] s) {
                 if(s[0].equals("show")){
-                    File file = new File("entry.json");
+                    File file = new File(Constants.ENTRY);
                     if(file.exists()){
                         try {
                             String entry = FileUtils.readFileToString(file);

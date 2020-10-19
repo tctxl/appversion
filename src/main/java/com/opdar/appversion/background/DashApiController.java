@@ -39,7 +39,7 @@ public class DashApiController {
 
     @Request(value = "/api/dash/login",restful = true,format = Request.Format.JSON)
     public String login(String userName,String userPwd) throws IOException {
-        File file = new File("entry.json");
+        File file = new File(Constants.ENTRY);
         String entry = null;
         if(file.exists()){
             entry = FileUtils.readFileToString(file);

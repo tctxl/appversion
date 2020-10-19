@@ -1,6 +1,6 @@
 *.iml
 .idea/
-entry.json
+entry/
 target/
 upload/
 apk/
