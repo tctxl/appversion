@@ -32,11 +32,11 @@
 
 **如何运行**
 
-`docker run tctxl/appversion:1.0.20201019`
+`docker run -it tctxl/appversion:1.0.20201019`
 
 如要自定义数据源，可使用以下命令，目前只支持MYSQL（MARIADB）
 
-`docker run 
+`docker run -it
 -e JDBC_URL="jdbc:mysql://127.0.0.1:3306/appversion?zeroDateTimeBehavior=convertToNull&useSSL=false"
 -e JDBC_USERNAME="root"
 -e JDBC_PASSWORD="123456"
