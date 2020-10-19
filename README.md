@@ -60,3 +60,18 @@ tctxl/appversion:1.0.20201019`
 用户名：wHWFXE
 密码：3NOZo5Wzufrf
 ```
+
+# API
+
+```
+接口：/api/version/check
+参数：
+ver : 版本号
+channel : 渠道号
+appId : 应用ID
+```
+
+**演示接口**
+```
+http://114.67.87.255:10007?ver=2020.8&channel=default&appId=1000
+```
