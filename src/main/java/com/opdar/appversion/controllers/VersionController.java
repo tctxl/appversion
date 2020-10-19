@@ -2,9 +2,14 @@ package com.opdar.appversion.controllers;
 
 import com.opdar.appversion.ApiApplication;
 import com.opdar.appversion.base.ErrCodeException;
+import com.opdar.appversion.base.ErrorPrinterHandler;
+import com.opdar.appversion.base.Result;
+import com.opdar.appversion.base.ResultEditor;
 import com.opdar.appversion.entity.AppChannelEntity;
 import com.opdar.appversion.entity.AppEntity;
 import com.opdar.appversion.service.AppService;
+import com.opdar.mote.web.annotations.web.Editor;
+import com.opdar.mote.web.annotations.web.ErrorHandler;
 import com.opdar.mote.web.annotations.web.Request;
 import com.opdar.mote.web.base.Context;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +25,8 @@ public class VersionController {
     @Autowired
     private AppService appService;
 
+    @ErrorHandler(ErrorPrinterHandler.class)
+    @Editor(ResultEditor.class)
     @Request(value = "/api/version/check", format = Request.Format.JSON)
     public AppChannelEntity check(String ver,String channel,Long appId) {
         if(StringUtils.isEmpty(ver) || StringUtils.isEmpty(channel) || StringUtils.isEmpty(appId)){

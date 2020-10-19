@@ -75,6 +75,9 @@ public class AppService {
             if (isUpdate) {
                 break;
             }
+            if(vi != lvi){
+                break;
+            }
         }
         return isUpdate;
     }
