@@ -75,3 +75,26 @@ appId : 应用ID
 ```
 http://114.67.87.255:10007?ver=2020.8&channel=default&appId=1000
 ```
+
+**返回结果**
+
+|字段名称|类型|描述|
+| :------------ | :------------ | :----------- |
+|id             |  Long         |  唯一主键       |
+|appId          |  Long         |  应用ID         |
+|appOpen        |  Integer      |  是否分发,0.未分发,1.已分发 |
+|channel        |  String       |  渠道名称 |
+|title          |  String       |  升级弹窗标题 |
+|content        |  String       |  升级弹窗简介 |
+|type           |  Integer      |  升级类型,1.非强制升级,2.强制升级,3.非强制升级-跳转浏览器,4.强制升级-跳转浏览器,5.非强制升级-跳转市场,6.强制升级-跳转市场 |
+|url            |  String       |  应用下载地址 |
+|versionCode    |  Integer      |  每次新建版本号会加一 |
+|versionName    |  String       |  版本号 |
+|createTime     |  Timestamp    |  条目创建时间 |
+|updateTime     |  Timestamp    |  条目更新时间 |
+
+**分发页面**
+```
+地址：/s/appId
+演示：http://114.67.87.255:10007/s/1000
+```
