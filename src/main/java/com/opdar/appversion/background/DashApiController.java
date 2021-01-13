@@ -212,12 +212,18 @@ public class DashApiController {
 
     @Interceptor(TokenInterceptor.class)
     @Request(value = "/api/dash/app/version", format = Request.Format.JSON)
-    public String versionUpload(FileItem[] file,String appId) throws Exception {
+    public String versionUpload(FileItem[] file,Long appId) throws Exception {
         if(file == null || StringUtils.isEmpty(appId)){
             throw new ErrCodeException(Constants.ErrorText.FILE_IS_NOT_FOUND);
         }
 
-        String fileName = UUID.randomUUID().toString().replaceAll("-","") + ".apk";
+        AppEntity app = appService.findApp(appId);
+        String ext = "apk";
+        if(!app.getPlatform().equalsIgnoreCase("Android")){
+            ext = "ipa";
+        }
+
+        String fileName = UUID.randomUUID().toString().replaceAll("-","") + "." + ext;
         String savePath = "./apk/"+appId+"/";
         FileItem fileItems = file[0];
         if (fileItems instanceof DiskFileItem) {

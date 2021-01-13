@@ -102,6 +102,12 @@ public class AppService {
         return page;
     }
 
+    public AppEntity findApp(Long id) {
+        AppEntity where = new AppEntity();
+        where.setId(id);
+        AppEntity app = appMapper.selectOne(where);
+        return app;
+    }
     public AppEntity updateApp(Long id, String appName, String platform, String appDesc, String icon) {
         AppEntity where = new AppEntity();
         where.setId(id);
