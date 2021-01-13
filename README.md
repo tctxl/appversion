@@ -22,7 +22,7 @@
 
 **获取当前版本**
 
-`docker pull tctxl/appversion:1.0.20201019`
+`docker pull tctxl/appversion:1.1.20210113`
 
 **数据库**
 
@@ -32,7 +32,7 @@
 
 **如何运行**
 
-`docker run -it tctxl/appversion:1.0.20201019`
+`docker run -it tctxl/appversion:1.1.20210113`
 
 如要自定义数据源，可使用以下命令，目前只支持MYSQL（MARIADB）
 
@@ -40,7 +40,7 @@
 -e JDBC_URL="jdbc:mysql://127.0.0.1:3306/appversion?zeroDateTimeBehavior=convertToNull&useSSL=false"
 -e JDBC_USERNAME="root"
 -e JDBC_PASSWORD="123456"
-tctxl/appversion:1.0.20201019`
+tctxl/appversion:1.1.20210113`
 
 **数据持久化**
 
@@ -53,7 +53,7 @@ tctxl/appversion:1.0.20201019`
 
 示例：
 
-`docker run  -it --name appversion -v $(pwd)/entry:/entry -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.0.20201019`
+`docker run  -it --name appversion -v $(pwd)/entry:/entry -v $(pwd)/db:/db -v $(pwd)/apk:/apk -v $(pwd)/upload:/upload -p 10005:10005 -d tctxl/appversion:1.1.20210113`
 
 **演示**
 ```

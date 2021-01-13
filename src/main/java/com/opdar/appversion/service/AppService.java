@@ -176,7 +176,7 @@ public class AppService {
         appWhere.setId(appId);
         AppEntity app = appMapper.selectOne(appWhere);
         AppChannelEntity where = new AppChannelEntity();
-        where.setAppOpen(1);
+        where.setShareTop(1);
         where.setAppId(appId);
         final AppChannelEntity channel = appChannelMapper.selectOne(where);
         if(channel != null){
@@ -185,15 +185,45 @@ public class AppService {
         return app;
     }
 
+    public AppEntity findAppChannel(Long channelId) {
+        AppChannelEntity where = new AppChannelEntity();
+        where.setAppOpen(1);
+        where.setId(channelId);
+        final AppChannelEntity channel = appChannelMapper.selectOne(where);
+        if(channel != null){
+            AppEntity appWhere = new AppEntity();
+            appWhere.setId(channel.getAppId());
+            AppEntity app = appMapper.selectOne(appWhere);
+            app.setChannels(new LinkedList<AppChannelEntity>(){{add(channel);}});
+            return app;
+        }
+        throw new ErrCodeException("渠道号不存在");
+    }
+
     public void shareApp(Long channelId, Long appId) {
         AppChannelEntity where = new AppChannelEntity();
         where.setAppId(appId);
         AppChannelEntity update = new AppChannelEntity();
-        update.setAppOpen(0);
+        update.setShareTop(0);
         appChannelMapper.update(update,where);
         where.setId(channelId);
-        update.setAppOpen(1);
+        update.setShareTop(1);
         appChannelMapper.update(update,where);
+    }
+
+    public Integer shareChannelApp(Long channelId, Long appId) {
+        AppChannelEntity where = new AppChannelEntity();
+        where.setAppId(appId);
+        where.setId(channelId);
+        AppChannelEntity appChannel = appChannelMapper.selectOne(where);
+        AppChannelEntity update = new AppChannelEntity();
+        if(appChannel.getAppOpen() == null || appChannel.getAppOpen() == 0){
+            update.setAppOpen(1);
+        }else{
+            update.setAppOpen(0);
+        }
+        appChannelMapper.update(update,where);
+        return update.getAppOpen();
     }
 
     public void deleteChannel(Long channelId, Long appId) {

@@ -17,6 +17,7 @@ public class AppChannelEntity {
     private Integer versionCode;
     private String channel;
     private Integer type;
+    private Integer shareTop;
     private Integer appOpen;
     private String title;
     private String content;
@@ -99,6 +100,14 @@ public class AppChannelEntity {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public Integer getShareTop() {
+        return shareTop;
+    }
+
+    public void setShareTop(Integer shareTop) {
+        this.shareTop = shareTop;
     }
 
     public String getTitle() {

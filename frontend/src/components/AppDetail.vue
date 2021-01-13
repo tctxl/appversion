@@ -134,13 +134,27 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="对外分发">
+            label="最新版本">
             <template slot-scope="scope">
               <!--              <el-button type="primary">对外分发</el-button>-->
               <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;"
-                 v-if="scope.row.appOpen !== 1" target="_blank" @click="shareApp(scope.row)">设置</a>
-              <div v-else><a style="text-decoration: none;color: #777777;" :href="$apk+'/s/'+$route.params.id">已分发</a>
+                 v-if="scope.row.shareTop !== 1" target="_blank" @click="shareApp(scope.row)">设置</a>
+              <div v-else><a style="text-decoration: none;color: #777777;" :href="$apk+'/s/'+$route.params.id">已设置</a>
               </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            width="84"
+            label="渠道分发">
+            <template slot-scope="scope">
+              <!--              <el-button type="primary">对外分发</el-button>-->
+
+              <a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;"
+                 v-if="scope.row.appOpen !== 1" target="_blank" @click="shareChannelApp(scope.row)">设置</a>
+              <div v-else ><a style="cursor: pointer;color: #0d7f56;border: none;text-decoration: none;" :href="$apk+'/c/'+scope.row.id">链接</a>
+                <sup style="zoom: 70%;"><a style="cursor: pointer;background: #e24f65;border-radius: 20px;padding: 4px;color: #ffffff;border: none;text-decoration: none;"
+                                     target="_blank" @click="shareChannelApp(scope.row)">已分发</a></sup></div>
+
             </template>
           </el-table-column>
           <el-table-column
@@ -197,9 +211,27 @@
         <a style="display: none;" ref="newVersionUrl" v-if="newVersion.url.length > 0" :href="$apk+newVersion.url"></a>
       </div>
       <div v-else>
-        <h4>AppStore设置</h4>
+
+        <div v-if="iosUpload">
+          <h4>AppStore设置 <el-button @click="iosUpload=false;" type="primary" size="mini">填写地址</el-button></h4>
+          <el-upload
+            :action="$api + 'api/dash/app/version'"
+            list-type="picture-card"
+            :show-file-list="false"
+            :data="{appId:app.id,token:$user.token}"
+            accept=".ipa"
+            :on-success="handleAppVersionSuccess"
+            :auto-upload="true">
+            <i slot="default" v-if="newVersion.url.length === 0" class="el-icon-plus"></i>
+            <i class="el-icon-check" slot="default" v-else></i>
+          </el-upload>
+          <a style="display: none;" ref="newVersionUrl" v-if="newVersion.url.length > 0" :href="$apk+newVersion.url"></a>
+        </div>
+        <div v-else>
+        <h4>AppStore设置 <el-button @click="iosUpload=true;" type="primary" size="mini">上传ipa</el-button></h4>
         <div>
           <el-input v-model="newVersion.url" placeholder="应用在AppStore内的地址"/>
+        </div>
         </div>
       </div>
       <div v-show="app.platform === 'Android'">
@@ -272,6 +304,7 @@ export default {
   data() {
     return {
       app: null,
+      iosUpload:false,
       pageNo: 1,
       pageCount: 1,
       editAppName: false,
@@ -319,9 +352,22 @@ export default {
           for (let i = 0; i < that.app.channels.length; i++) {
             let c = that.app.channels[i];
             if (c.id !== channel.id) {
-              c.appOpen = 0;
+              c.shareTop = 0;
             } else {
-              c.appOpen = 1;
+              c.shareTop = 1;
+            }
+          }
+        }
+      })
+    },
+    shareChannelApp(channel){
+      let that = this;
+      that.$http.post('/api/dash/channel/share', {appId: this.$route.params.id, id: channel.id}).then((res) => {
+        if (res.data.code === 0) {
+          for (let i = 0; i < that.app.channels.length; i++) {
+            let c = that.app.channels[i];
+            if (c.id === channel.id) {
+              c.appOpen = res.data.data;
             }
           }
         }

@@ -108,6 +108,18 @@ public class DashApiController {
     }
 
     @Interceptor(TokenInterceptor.class)
+    @Request(value = "/api/dash/channel/share",restful = true,format = Request.Format.JSON)
+    public Integer channelShare(Long id, Long appId) {
+        if(StringUtils.isEmpty(appId)){
+            throw new ErrCodeException(Constants.ErrorText.APP_ID_ERROR);
+        }
+        if(StringUtils.isEmpty(id)){
+            throw new ErrCodeException(Constants.ErrorText.PARAMS_ERROR);
+        }
+        return appService.shareChannelApp(id,appId);
+    }
+
+    @Interceptor(TokenInterceptor.class)
     @Request(value = "/api/dash/app/delete",restful = true,format = Request.Format.JSON)
     public String appDelete(Long id) {
         if(StringUtils.isEmpty(id)){

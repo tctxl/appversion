@@ -48,6 +48,15 @@ public class VersionController {
         return "app";
     }
 
+    @Request(value = "/c/{{channelId}}",restful = true, format = Request.Format.VIEW)
+    public String shareChannel(Long channelId) {
+        AppEntity app = appService.findAppChannel(channelId);
+        if(app.getChannels().size() == 0){
+            throw new ErrCodeException("未找到该应用");
+        }
+        Context.putAttribute("app",app);
+        return "app";
+    }
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext(ApiApplication.class);
         VersionController versionController = context.getBean(VersionController.class);
